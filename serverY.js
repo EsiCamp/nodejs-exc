@@ -17,8 +17,8 @@ const serverY = http.createServer((req, res) => {
       res.end("Data received on Server Y!");
     });
   } else {
-    res.writeHead(200, { "Content-Type": "text/html" });
-    res.end("Hello from Server Y!");
+    res.writeHead(404, { "Content-Type": "text/html" });
+    res.end("Page Not Found!");
   }
 });
 
@@ -28,7 +28,18 @@ serverY.listen(PORT_Y, () => {
   console.log(`Server Y is running at http://localhost:${PORT_Y}`);
 });
 
-function saveDataToJSON(data) {
-  const jsonData = JSON.stringify(data);
+function saveDataToJSON(newUserData) {
+  let jsonData = fs.readFileSync("data.json", "utf8");
+
+  let usersArray = jsonData ? JSON.parse(jsonData) : [];
+
+  if (!Array.isArray(usersArray)) {
+    usersArray = [];
+  }
+
+  usersArray.push(newUserData);
+
+  jsonData = JSON.stringify(usersArray, null, 2);
+
   fs.writeFileSync("data.json", jsonData);
 }
