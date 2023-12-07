@@ -18,5 +18,25 @@
 
       <input type="submit" value="Submit" />
     </form>
+    <button onclick="showUserList()">Show User List</button>
+
+    <div id="userList"></div>
+
+    <script>
+      function showUserList() {
+        try {
+          const response = fetch("http://localhost:8080/getList");
+          const userList = response.json();
+
+          const userListDiv = document.getElementById("userList");
+          userListDiv.innerHTML = "<h2>User List:</h2>";
+          userList.forEach((user) => {
+            userListDiv.innerHTML += `<p>Username: ${user.username}, Mobile: ${user.mobile}, Password: ${user.password}</p>`;
+          });
+        } catch (error) {
+          console.error("Error fetching user list:", error.message);
+        }
+      }
+    </script>
   </body>
 </html>
